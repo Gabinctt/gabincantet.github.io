@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gabin Cantet — Social Media Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0d0d0d;
+      --surface: #161616;
+      --card: #1c1c1c;
+      --accent: #f5c842;
+      --accent2: #ff6b35;
+      --text: #f0ede6;
+      --muted: #888;
+      --border: #2a2a2a;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ---- NOISE OVERLAY ---- */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.35;
+    }
+
+    /* ---- NAV ---- */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.2rem 4vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      background: rgba(13,13,13,0.85);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--accent); }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--accent); }
+
+    /* ---- HERO ---- */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 8rem 4vw 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      right: -10vw;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 55vw;
+      height: 55vw;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(245,200,66,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-text { max-width: 560px; }
+
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 0.3rem 0.9rem;
+      border-radius: 2rem;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      line-height: 1.05;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.7s ease 0.1s both;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: #aaa;
+      max-width: 440px;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.7s ease 0.2s both;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      animation: fadeUp 0.7s ease 0.3s both;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 2rem;
+      border-radius: 3rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.25s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0d0d0d;
+    }
+
+    .btn-primary:hover {
+      background: #ffd94a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(245,200,66,0.3);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* HERO VISUAL */
+    .hero-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: fadeUp 0.8s ease 0.2s both;
+    }
+
+    .hero-card {
+      position: relative;
+      width: 320px;
+    }
+
+    .hero-card .card-main {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card .card-main::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(245,200,66,0.15), transparent 70%);
+    }
+
+    .avatar {
+      width: 70px; height: 70px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #0d0d0d;
+      margin-bottom: 1rem;
+    }
+
+    .card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .card-title {
+      font-size: 0.8rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+    }
+
+    .stat {
+      background: var(--surface);
+      border-radius: 0.75rem;
+      padding: 0.8rem;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 0.65rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 0.2rem;
+    }
+
+    .floating-tag {
+      position: absolute;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 2rem;
+      padding: 0.45rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .ft1 { top: -20px; right: -30px; animation-delay: 0s; }
+    .ft2 { bottom: 20px; left: -40px; animation-delay: 1.5s; }
+
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #4caf50; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ---- SECTIONS COMMUNES ---- */
+    section {
+      padding: 6rem 4vw;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      margin-bottom: 3rem;
+      line-height: 1.1;
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    hr.divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0 4vw;
+    }
+
+    /* ---- À PROPOS ---- */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: #bbb;
+      line-height: 1.8;
+      font-size: 1rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .about-text p strong { color: var(--text); }
+
+    .about-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 2rem;
+    }
+
+    .badge {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 2rem;
+      padding: 0.4rem 1rem;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+
+    .badge:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .about-timeline { position: relative; }
+
+    .timeline-item {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.8rem;
+      position: relative;
+    }
+
+    .tl-icon {
+      width: 42px; height: 42px;
+      min-width: 42px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .tl-content { padding-top: 0.4rem; }
+
+    .tl-date {
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+
+    .tl-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-bottom: 0.2rem;
+    }
+
+    .tl-desc {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ---- SERVICES ---- */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 1.2rem;
+      padding: 2rem;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(245,200,66,0.04), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .service-card:hover {
+      border-color: rgba(245,200,66,0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+
+    .service-card:hover::before { opacity: 1; }
+
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .service-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+    }
+
+    .service-desc {
+      font-size: 0.85rem;
+      color: #999;
+      line-height: 1.7;
+    }
+
+    /* ---- COMPÉTENCES ---- */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.2rem;
+    }
+
+    .skill-item { margin-bottom: 0.5rem; }
+
+    .skill-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 0.88rem;
+    }
+
+    .skill-pct { color: var(--accent); font-weight: 500; }
+
+    .skill-bar {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .skill-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 2px;
+      transform-origin: left;
+      animation: grow 1.2s ease both;
+    }
+
+    @keyframes grow {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+
+    /* ---- PROJET ---- */
+    .project-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 1.5rem;
+      padding: 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::after {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 250px; height: 250px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,107,53,0.12), transparent 70%);
+      pointer-events: none;
+    }
+
+    .project-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 0.8rem;
+    }
+
+    .project-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+    }
+
+    .project-desc {
+      color: #aaa;
+      line-height: 1.7;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .project-tag {
+      background: rgba(255,107,53,0.1);
+      border: 1px solid rgba(255,107,53,0.3);
+      color: var(--accent2);
+      border-radius: 2rem;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.75rem;
+    }
+
+    .project-visual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .pv-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.2rem;
+      text-align: center;
+    }
+
+    .pv-card:first-child {
+      grid-column: span 2;
+    }
+
+    .pv-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    .pv-label { font-size: 0.75rem; color: var(--muted); }
+
+    /* ---- CONTACT ---- */
+    .contact-wrap {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 1.5rem;
+      padding: 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-wrap::before {
+      content: '';
+      position: absolute;
+      bottom: -100px; left: 50%;
+      transform: translateX(-50%);
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(245,200,66,0.06), transparent 70%);
+    }
+
+    .contact-wrap .section-title { margin-bottom: 1rem; }
+
+    .contact-desc {
+      color: #999;
+      font-size: 1rem;
+      max-width: 460px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* ---- FOOTER ---- */
+    footer {
+      text-align: center;
+      padding: 2rem 4vw;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    footer span { color: var(--accent); }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; padding-top: 7rem; }
+      .hero-visual { display: none; }
+      .about-grid { grid-template-columns: 1fr; }
+      .services-grid { grid-template-columns: 1fr; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .project-card { grid-template-columns: 1fr; }
+      nav ul { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">G<span>.</span>Cantet</a>
+    <ul>
+      <li><a href="#about">À propos</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#skills">Compétences</a></li>
+      <li><a href="#projet">Projet</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-text">
+      <div class="hero-tag">📱 Social Media Manager</div>
+      <h1>Gabin<br><em>Cantet</em></h1>
+      <p class="hero-desc">
+        Je gère vos réseaux sociaux pour que vous puissiez vous concentrer sur ce qui compte vraiment — votre business. Stratégie, création de contenu, montage photo &amp; vidéo.
+      </p>
+      <div class="hero-cta">
+        <a href="#contact" class="btn btn-primary">✉️ Me contacter</a>
+        <a href="#services" class="btn btn-outline">Mes services →</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card">
+        <div class="floating-tag ft1"><div class="dot"></div> Disponible</div>
+        <div class="floating-tag ft2">🇨🇦 Expérience Canada</div>
+        <div class="card-main">
+          <div class="avatar">G</div>
+          <div class="card-name">Gabin Cantet</div>
+          <div class="card-title">Social Media Manager</div>
+          <div class="card-stats">
+            <div class="stat">
+              <div class="stat-num">18</div>
+              <div class="stat-label">ans</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">6</div>
+              <div class="stat-label">mois Canada</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">PME</div>
+              <div class="stat-label">cible</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">100%</div>
+              <div class="stat-label">impliqué</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- À PROPOS -->
+  <section id="about">
+    <div class="about-grid">
+      <div class="about-text">
+        <div class="section-label">— Qui suis-je ?</div>
+        <h2 class="section-title">Jeune, motivé &<br><em>dans l'ère du temps</em></h2>
+        <p>
+          J'ai <strong>18 ans</strong>, j'ai obtenu mon Bac <strong>STMG</strong> et j'ai passé <strong>6 mois au Canada</strong> — une expérience qui m'a ouvert l'esprit et renforcé mon autonomie.
+        </p>
+        <p>
+          Ce qui me pousse, c'est <strong>l'envie de rendre service</strong> aux personnes qui en ont besoin. Les petites et moyennes entreprises méritent une présence en ligne forte, sans forcément avoir le temps ou les ressources de s'en occuper elles-mêmes.
+        </p>
+        <p>
+          Avantage : je suis de ma génération. Je <strong>vis sur les réseaux sociaux</strong>, je sais ce qui capte l'attention et ce qui se noie dans le flux.
+        </p>
+        <div class="about-badges">
+          <span class="badge">🎨 Canva</span>
+          <span class="badge">🎬 Montage vidéo</span>
+          <span class="badge">📸 Retouche photo</span>
+          <span class="badge">📊 Stratégie contenu</span>
+          <span class="badge">🤝 Relationnel</span>
+          <span class="badge">🇨🇦 Ouverture internationale</span>
+        </div>
+      </div>
+      <div class="about-timeline">
+        <div class="timeline-item">
+          <div class="tl-icon">🎓</div>
+          <div class="tl-content">
+            <div class="tl-date">2024</div>
+            <div class="tl-title">Bac STMG obtenu</div>
+            <div class="tl-desc">Spécialité gestion et management, bases solides en communication d'entreprise.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-icon">🇨🇦</div>
+          <div class="tl-content">
+            <div class="tl-date">2024 — 2025</div>
+            <div class="tl-title">6 mois au Canada</div>
+            <div class="tl-desc">Immersion anglophone, découverte de nouveaux marchés et tendances digitales.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-icon">🚀</div>
+          <div class="tl-content">
+            <div class="tl-date">2025 — aujourd'hui</div>
+            <div class="tl-title">Lancement de mon activité</div>
+            <div class="tl-desc">Accompagnement des PME dans leur stratégie social media, disponible dès maintenant.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-label">— Ce que je propose</div>
+    <h2 class="section-title">Mes <em>services</em></h2>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">📅</div>
+        <div class="service-title">Gestion des réseaux</div>
+        <div class="service-desc">Publication régulière, calendrier éditorial, animation de communauté sur Instagram, Facebook, TikTok, LinkedIn…</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🎨</div>
+        <div class="service-title">Création de contenu</div>
+        <div class="service-desc">Visuels percutants sur Canva, montage photo et vidéo adaptés à chaque plateforme et à votre identité visuelle.</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📈</div>
+        <div class="service-title">Stratégie & croissance</div>
+        <div class="service-desc">Analyse de vos performances, optimisation des posts, conseils pour toucher votre audience cible et développer votre visibilité.</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <!-- COMPÉTENCES -->
+  <section id="skills">
+    <div class="section-label">— Mes outils</div>
+    <h2 class="section-title"><em>Compétences</em> clés</h2>
+    <div class="skills-grid">
+      <div>
+        <div class="skill-item">
+          <div class="skill-header"><span>Canva & design</span><span class="skill-pct">90%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
+        </div>
+        <div class="skill-item" style="margin-top:1.4rem">
+          <div class="skill-header"><span>Montage photo</span><span class="skill-pct">85%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
+        </div>
+        <div class="skill-item" style="margin-top:1.4rem">
+          <div class="skill-header"><span>Montage vidéo</span><span class="skill-pct">80%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="skill-item">
+          <div class="skill-header"><span>Instagram / TikTok</span><span class="skill-pct">95%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div>
+        </div>
+        <div class="skill-item" style="margin-top:1.4rem">
+          <div class="skill-header"><span>Stratégie de contenu</span><span class="skill-pct">80%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
+        </div>
+        <div class="skill-item" style="margin-top:1.4rem">
+          <div class="skill-header"><span>Relation client</span><span class="skill-pct">90%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <!-- PROJET -->
+  <section id="projet">
+    <div class="section-label">— Mon offre</div>
+    <h2 class="section-title">Le <em>projet</em></h2>
+    <div class="project-card">
+      <div>
+        <div class="project-label">Mission principale</div>
+        <div class="project-title">Gestion social media pour PME</div>
+        <p class="project-desc">
+          Je prends en charge la présence en ligne de votre entreprise, que ce soit sur le court ou le long terme. Objectif : vous faire gagner du temps tout en boostant votre visibilité et votre engagement.
+        </p>
+        <div class="project-tags">
+          <span class="project-tag">Court terme</span>
+          <span class="project-tag">Long terme</span>
+          <span class="project-tag">PME & TPE</span>
+          <span class="project-tag">All réseaux</span>
+        </div>
+      </div>
+      <div class="project-visual">
+        <div class="pv-card">
+          <div class="pv-icon">📊</div>
+          <div class="pv-label">Suivi des performances hebdomadaire</div>
+        </div>
+        <div class="pv-card">
+          <div class="pv-icon">📸</div>
+          <div class="pv-label">Création visuelle</div>
+        </div>
+        <div class="pv-card">
+          <div class="pv-icon">🎬</div>
+          <div class="pv-label">Contenu vidéo</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-wrap">
+      <div class="section-label">— Travaillons ensemble</div>
+      <h2 class="section-title">Prêt à booster<br><em>vos réseaux ?</em></h2>
+      <p class="contact-desc">
+        Une question, un projet, une idée ? N'hésitez pas à me contacter, je réponds rapidement et sans engagement.
+      </p>
+      <div class="contact-links">
+        <a href="mailto:gabincantet@gmail.com" class="btn btn-primary">✉️ gabincantet@gmail.com</a>
+        <a href="https://www.linkedin.com/in/gabin-cantet" target="_blank" class="btn btn-outline">💼 LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 <span>Gabin Cantet</span> — Social Media Manager · Fait avec passion 🔥</p>
+  </footer>
+
+</body>
+</html>
